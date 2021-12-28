@@ -1,5 +1,5 @@
-const { validateMetadata } = require("/opt/verdaccio/build/lib/utils");
-const bodyParser = require("body-parser");
+const { validateMetadata } = require('/opt/verdaccio/build/lib/utils');
+const bodyParser = require('body-parser');
 
 function Plugin(config, pluginOptions) {
   const self = Object.create(Plugin.prototype);
@@ -17,30 +17,30 @@ Plugin.prototype.register_middlewares = function (app, auth) {
   const logger = this._logger;
   const permission = this.permission;
   app.put(
-    "/:package/:_rev?/:revision?",
-    bodyParser.json({ strict: false, limit: "10mb" }),
+    '/:package/:_rev?/:revision?',
+    bodyParser.json({ strict: false, limit: '10mb' }),
     auth.apiJWTmiddleware(),
     function (req, res, next) {
-      if (req.headers.referer !== "publish") {
+      if (req.headers.referer !== 'publish') {
         return next();
       }
       const packageName = req.params.package;
-      if (packageName === "-") {
+      if (packageName === '-') {
         return next();
       }
       const metadata = validateMetadata(req.body, packageName);
       const remote = req.remote_user;
 
       let rejected = false;
-      if (permission[packageName] && metadata["dist-tags"]) {
-        Object.keys(metadata["dist-tags"]).forEach((tag) => {
+      if (permission[packageName] && metadata['dist-tags']) {
+        Object.keys(metadata['dist-tags']).forEach((tag) => {
           if (!permission[packageName][tag]) {
             return;
           }
 
           if (!permission[packageName][tag].includes(remote.name)) {
             logger.info(
-              `rejected ${remote.name} publish latest tag of ${metadata.name}`
+              `rejected ${remote.name} from publishing ${tag} tag of ${metadata.name}`
             );
             rejected = true;
           }

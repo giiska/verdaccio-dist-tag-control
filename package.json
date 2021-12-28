@@ -1,6 +1,6 @@
 {
   "name": "verdaccio-dist-tag-control",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Verdaccio plugin to control permission of publish dist-tag",
   "keywords": [
     "verdaccio",
@@ -16,6 +16,10 @@
   ],
   "engines": {
     "node": ">=8"
+  },
+  "scripts": {
+    "release": "npm publish --registry https://registry.npmjs.org/",
+    "beta": "npm publish --tag beta --registry https://registry.npmjs.org/"
   },
   "funding": {
     "type": "opencollective",
